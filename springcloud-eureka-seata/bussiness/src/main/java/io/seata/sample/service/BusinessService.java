@@ -33,12 +33,16 @@ public class BusinessService {
      * @param commodityCode
      * @param orderCount
      */
+    // 全局事务发起者: 账户初始金额10000, 库存200, 订单列表为空
     @GlobalTransactional
     public void purchase(String userId, String commodityCode, int orderCount) {
+        // 提交测试时, 每次扣减30个库存; 异常测试时, 每次扣减99999个库存(库存不足)
         storageFeignClient.deduct(commodityCode, orderCount);
 
+        // 每次扣减30 * 100金额, 生成30个的订单; 异常测试时, 每次扣减30 * 90000(余额不足)
         orderFeignClient.create(userId, commodityCode, orderCount);
 
+        // 校验数据合法性: 库存、余额不能为负数
         if (!validData()) {
             throw new RuntimeException("账户或库存不足,执行回滚");
         }
