@@ -15,7 +15,7 @@ public class StorageClient {
 
     public void deduct(String commodityCode, int orderCount) {
         System.out.println("business to storage " + RootContext.getXID());
-        String url = "http://127.0.0.1:8081/api/storage/deduct?commodityCode=" + commodityCode + "&count=" + orderCount;
+        String url = "http://127.0.0.1:8084/api/storage/deduct?commodityCode=" + commodityCode + "&count=" + orderCount;
         try {
             restTemplate.getForEntity(url, Void.class);
         } catch (Exception e) {
